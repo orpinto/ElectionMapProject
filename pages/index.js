@@ -61,10 +61,18 @@ class App extends Component {
     return (
       <div className="App">
         <div className='roadto270-game'>
-          <div id='header-svg'></div>
           <header id='roadto270-header'>
+          <svg className='headerAccent' width="100%" height="10" >
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color={red} stop-opacity='1' />
+                <stop offset="100%" stop-color={blue} stop-opacity='1' />
+                </linearGradient>
+            </defs>
+            <rect width="100%"  fill="url(#grad1)" />
+          </svg>
             <h1 id='title' style={{fontFamily: 'arial'}}>2020 Election</h1>
-            <div style={{fontFamily: 'arial'}}>ICONS</div>
+            <div id='icons' style={{fontFamily: 'arial'}}>ICONS</div>
           </header>
           <h2 style={{ color: red }}>
           {`Trump: ${this.tallyCandidateVotes('Trump')}`}
@@ -88,16 +96,22 @@ class App extends Component {
               flex-direction: column;
               justify-content: center;
               width: 100%;
-              padding-top: 20px;
+              padding-top: 0px;
               padding-bottom: 10px;
               background-color: rgb(220, 220, 220);
+            }
+            .headerAccent {
+              width: 100%
             }
             #title {
               align-self: left;
               text-align: left;
               color: black;
               top: 0;
-              margin: 0px;
+              margin-left: 5px;
+            }
+            #icons {
+              margin-left: 5px;
             }
             .svg-container { 
               display: inline-block;
@@ -133,6 +147,9 @@ class App extends Component {
               }
               #roadto270-header {
                 width: 960px;
+              }
+              .headerAccent {
+                width: 960px
               }
          }
           `}</style>
