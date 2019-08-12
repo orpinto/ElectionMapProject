@@ -5,7 +5,7 @@ import abbreviations from '../static/abbreviations.json';
 const blue = '#3480eb', red = '#eb4034';
 
 //initate map 
-const createMap = (indexState, handleMapClick) => {
+const createMap = (indexState, handleBoardClick) => {
 
     const { width, height, scale, electionResult, usStates } = indexState;
 
@@ -41,7 +41,7 @@ const createMap = (indexState, handleMapClick) => {
         .style('stroke', 'white')
         .style('stroke-width', '1')
         .style('fill', addStateColor)
-        .on('click', handleMapClick);
+        .on('click', handleBoardClick);
 
         function addStateColor(d, i) {  // This will change toggle between D and R once decided
             const { NAME } = d.properties;

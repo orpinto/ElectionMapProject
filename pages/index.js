@@ -16,30 +16,13 @@ class App extends Component {
         results[usState.StateName] = usState;
         return results;
       }, {}),
-      usStates: [collection.features]
+      usStates: [collection.features],
     };
   }
   
-  //handle map and board clicks
-  handleMapClick = usState => {
-    const usStateName = usState.properties.NAME;
-    const previousResult = this.state.electionResult[usStateName];
-    const newElectionResult = { ...this.state.electionResult};
-    const { StateVotes, Trump } = newElectionResult[usStateName];
-    if (Trump > 0) {
-      newElectionResult[usStateName].Trump = '-';
-      newElectionResult[usStateName].Clinton = StateVotes;
-    } else {
-      newElectionResult[usStateName].Trump = StateVotes;
-      newElectionResult[usStateName].Clinton = '-';
-    }
-    this.setState({ electionResult: newElectionResult });
-    updateMap(this.state, usStateName);
-    updateBoard(this.state, usStateName, previousResult);
-  }
-
-  handleBoardClick = usState => {
-    const usStateName = usState.StateName;
+  //handle board and map clicks
+  handleBoardClick = (usState, usState2) => {
+    const usStateName = usState? usState.properties.NAME : usState2.StateName;
     const previousResult = this.state.electionResult[usStateName];
     const newElectionResult = { ...this.state.electionResult};
     const { StateVotes, Trump } = newElectionResult[usStateName];
@@ -56,14 +39,25 @@ class App extends Component {
   }
 
   componentDidMount() {
-    createMap(this.state, this.handleMapClick);
+    createMap(this.state, this.handleBoardClick);
     createBoard(this.state, this.handleBoardClick);
   }
 
-  handleReset = () => createMap(this.state);
+  handleReset = () => {}
 
+  tallyCandidateVotes(candidate) {
+   
+    return electionResults.reduce((result, state) => {
+      if (!isNaN(state[candidate])) {
+        result = result + state[candidate];
+      }
+      return result;
+    }, 0);
+  }
 
   render() {
+    const blue = '#3480eb', red = '#eb4034';
+
     return (
       <div className="App">
         <div className='roadto270-game'>
@@ -72,6 +66,12 @@ class App extends Component {
             <h1 id='title' style={{fontFamily: 'arial'}}>2020 Election</h1>
             <div style={{fontFamily: 'arial'}}>ICONS</div>
           </header>
+          <h2 style={{ color: red }}>
+          {`Trump: ${this.tallyCandidateVotes('Trump')}`}
+          </h2>
+          <h2 style={{ color: blue }}>
+            {`Clinton: ${this.tallyCandidateVotes('Clinton')}`}
+          </h2>
           <div className="svg-container">
             <text className='reset' style={{fontFamily: 'arial'}} onClick={this.handleReset}>reset</text>
           </div>
@@ -79,7 +79,6 @@ class App extends Component {
           <style jsx>{`
             .roadto270-game {
               display: flex;
-              border: solid red 2px;
               flex-direction: column;
               width: 100%;
             }
@@ -88,7 +87,6 @@ class App extends Component {
               position: sticky;
               flex-direction: column;
               justify-content: center;
-              border: solid pink 2px;
               width: 100%;
               padding-top: 20px;
               padding-bottom: 10px;

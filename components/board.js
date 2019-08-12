@@ -54,7 +54,7 @@ const createBoard = (indexState, handleBoardClick) => {
                 return stateResult.Trump > 0 ? red : blue;
             })
             .attr('rx', 10)
-            .on('click', () => handleBoardClick(stateResult));
+            .on('click', () => handleBoardClick('', stateResult));
         svgBoard
             .append('text')
             .attr('class',`text${statesList[i].replace(/\s+/g,'')}`)
