@@ -21,7 +21,7 @@ class App extends Component {
   }
   
   //handle map and board clicks
-  handleMapClick = (usState) => {
+  handleMapClick = usState => {
     const usStateName = usState.properties.NAME;
     const previousResult = this.state.electionResult[usStateName];
     const newElectionResult = { ...this.state.electionResult};
@@ -36,12 +36,28 @@ class App extends Component {
     this.setState({ electionResult: newElectionResult });
     updateMap(this.state, usStateName);
     updateBoard(this.state, usStateName, previousResult);
+  }
 
+  handleBoardClick = usState => {
+    const usStateName = usState.StateName;
+    const previousResult = this.state.electionResult[usStateName];
+    const newElectionResult = { ...this.state.electionResult};
+    const { StateVotes, Trump } = newElectionResult[usStateName];
+    if (Trump > 0) {
+      newElectionResult[usStateName].Trump = '-';
+      newElectionResult[usStateName].Clinton = StateVotes;
+    } else {
+      newElectionResult[usStateName].Trump = StateVotes;
+      newElectionResult[usStateName].Clinton = '-';
+    }
+    this.setState({ electionResult: newElectionResult });
+    updateMap(this.state, usStateName);
+    updateBoard(this.state, usStateName, previousResult);
   }
 
   componentDidMount() {
     createMap(this.state, this.handleMapClick);
-    createBoard(this.state);
+    createBoard(this.state, this.handleBoardClick);
   }
 
   handleReset = () => createMap(this.state);

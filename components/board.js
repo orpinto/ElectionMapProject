@@ -4,7 +4,7 @@ const blue = '#3480eb', red = '#eb4034';
 const svgRectHeight = 55, svgRectWidth = 195, svgPadding = 12;
 
 //initiate board 
-const createBoard = indexState => {
+const createBoard = (indexState, handleBoardClick) => {
 
     const { width, height, scale, electionResult, usStates } = indexState;
     const statesList = Object.keys(electionResult);
@@ -53,7 +53,8 @@ const createBoard = indexState => {
             .attr('fill', () => {
                 return stateResult.Trump > 0 ? red : blue;
             })
-            .attr('rx', 10);
+            .attr('rx', 10)
+            .on('click', () => handleBoardClick(stateResult));
         svgBoard
             .append('text')
             .attr('class',`text${statesList[i].replace(/\s+/g,'')}`)
