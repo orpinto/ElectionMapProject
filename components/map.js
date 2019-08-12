@@ -1,12 +1,13 @@
 import * as d3 from 'd3';
 import abbreviations from '../static/abbreviations.json';
-import React, { Component } from 'react';
 
 
+const blue = '#3480eb', red = '#eb4034';
+
+//initate map 
 const createMap = (indexState, handleMapClick) => {
 
     const { width, height, scale, electionResult, usStates } = indexState;
-    const blue = '#3480eb', red = '#eb4034';
 
     var projection = d3
       .geoAlbersUsa()
@@ -33,6 +34,9 @@ const createMap = (indexState, handleMapClick) => {
         .data(json.features)
         .enter()
         .append('path')
+        .attr('class', (d) => {
+          return `${d.properties.NAME.replace(/\s+/g,'')}`;
+        })
         .attr('d', path)
         .style('stroke', 'white')
         .style('stroke-width', '1')
@@ -64,13 +68,26 @@ const createMap = (indexState, handleMapClick) => {
           .attr("text-anchor","middle") 
           .attr("font-weight", "bold") 
           .attr('fill', 'white')
-          .attr('font-size','12px'); 
+          .attr('font-size','12px')
+          .attr('font-family','arial'); 
     });
 
 }
 
-const updateMap = () => {
-  
+//update map for vote result changes
+const updateMap = (indexState, stateToUpdate) => {
+  const { width, height, scale, electionResult, usStates } = indexState;
+  d3.select(`.${stateToUpdate.replace(/\s+/g,'')}`)
+    .style('fill', () => {
+      if (!electionResult[stateToUpdate]){
+        return 'grey';
+      } 
+      if(electionResult[stateToUpdate].Trump > 0) {
+          return red;
+      }
+      else {
+        return blue;
+    }});
 }
 
-export default createMap;
+export {createMap, updateMap};

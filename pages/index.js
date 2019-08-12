@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import createMap from '../components/map.js';
+import { createMap, updateMap } from '../components/map.js';
 import electionResults from '../static/election-results.json';
-import createBoard from '../components/board.js';
+import { createBoard, updateBoard } from '../components/board.js';
 import collection from '../static/us-states.json';
 
 class App extends Component {
@@ -19,6 +19,25 @@ class App extends Component {
       usStates: [collection.features]
     };
   }
+  
+  //handle map and board clicks
+  handleMapClick = (usState) => {
+    const usStateName = usState.properties.NAME;
+    const previousResult = this.state.electionResult[usStateName];
+    const newElectionResult = { ...this.state.electionResult};
+    const { StateVotes, Trump } = newElectionResult[usStateName];
+    if (Trump > 0) {
+      newElectionResult[usStateName].Trump = '-';
+      newElectionResult[usStateName].Clinton = StateVotes;
+    } else {
+      newElectionResult[usStateName].Trump = StateVotes;
+      newElectionResult[usStateName].Clinton = '-';
+    }
+    this.setState({ electionResult: newElectionResult });
+    updateMap(this.state, usStateName);
+    updateBoard(this.state, usStateName, previousResult);
+
+  }
 
   componentDidMount() {
     createMap(this.state, this.handleMapClick);
@@ -27,20 +46,6 @@ class App extends Component {
 
   handleReset = () => createMap(this.state);
 
-  handleMapClick(usState) {
-    const usStateName = usState.properties.NAME;
-    console.log(usStateName)
-    // const newElectionResult = { ...this.state.electionResult};
-    // const { StateVotes, Trump } = newElectionResult[usStateName];
-    // if (Trump > 0) {
-    //   newElectionResult[usStateName].Trump = '-';
-    //   newElectionResult[usStateName].Clinton = StateVotes;
-    // } else {
-    //   newElectionResult[usStateName].Trump = StateVotes;
-    //   newElectionResult[usStateName].Clinton = '-';
-    // }
-    // this.setState({ electionResult: newElectionResult });
-  }
 
   render() {
     return (
@@ -49,10 +54,10 @@ class App extends Component {
           <div id='header-svg'></div>
           <header id='roadto270-header'>
             <h1 id='title' style={{fontFamily: 'arial'}}>2020 Election</h1>
-            <div>ICONS</div>
+            <div style={{fontFamily: 'arial'}}>ICONS</div>
           </header>
           <div className="svg-container">
-            <text className='reset' onClick={this.handleReset}>reset</text>
+            <text className='reset' style={{fontFamily: 'arial'}} onClick={this.handleReset}>reset</text>
           </div>
           <div className='svg-board'></div>
           <style jsx>{`
