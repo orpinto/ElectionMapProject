@@ -43,6 +43,7 @@ class App extends Component {
     createBoard(this.state, this.handleBoardClick);
   }
 
+  //define
   handleReset = () => {}
 
   tallyCandidateVotes(candidate) {
@@ -74,14 +75,16 @@ class App extends Component {
             <h1 id='title' style={{fontFamily: 'arial'}}>2020 Election</h1>
             <div id='icons' style={{fontFamily: 'arial'}}>ICONS</div>
           </header>
-          <h2 style={{ color: red }}>
-          {`Trump: ${this.tallyCandidateVotes('Trump')}`}
-          </h2>
-          <h2 style={{ color: blue }}>
-            {`Clinton: ${this.tallyCandidateVotes('Clinton')}`}
-          </h2>
           <div className="svg-container">
             <text className='reset' style={{fontFamily: 'arial'}} onClick={this.handleReset}>reset</text>
+          </div>
+          <div className='svg-candidate'>
+            <div style={{fontFamily: 'arial', color: red }}>
+            {`Trump: ${this.tallyCandidateVotes('Trump')}`}
+            </div>
+            <div style={{fontFamily: 'arial', color: blue }}>
+              {`Clinton: ${this.tallyCandidateVotes('Clinton')}`}
+            </div>
           </div>
           <div className='svg-board'></div>
           <style jsx>{`
@@ -126,6 +129,16 @@ class App extends Component {
               position: absolute;
               top: 0;
               left: 0;
+            }
+            .svg-candidate {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              width: 100%
+              margin: 0;
+              padding-bottom: 25px;
+              font-weight: bold;
+              font-size: 25px;
             }
             .svg-board { 
               display: inline-block;
